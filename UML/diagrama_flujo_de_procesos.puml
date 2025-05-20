@@ -1,0 +1,32 @@
+@startuml
+start
+
+:Gestor ingresa al sistema;
+:Gestor registra nueva O.C.;
+:Sistema guarda O.C. con estado 'Pendiente';
+:Sistema notifica a Aprobador de Área;
+
+:¿Aprobador de Área aprueba la O.C.?;
+
+if (Aprueba?) then (Sí)
+  :Sistema cambia estado a 'Liberado por Aprobador de Área';
+  :Sistema notifica a Aprobador General;
+  :Sistema notifica a Gestor (liberado);
+  :Aprobador General revisa O.C.;
+  if (Aprobador General aprueba?) then (Sí)
+    :Sistema cambia estado a 'Finalizado';
+    :Sistema notifica a Gestor (finalizado);
+  else (No)
+    :Sistema cambia estado a 'Rechazado por Aprobador General';
+    :Sistema notifica a Gestor y Aprobador de Área (motivo);
+  endif
+else (No)
+  :Sistema cambia estado a 'Rechazado por Aprobador de Área';
+  :Sistema notifica a Gestor (motivo);
+endif
+
+:Gestor puede consultar estado y fechas de su O.C. en todo momento;
+:Todos los movimientos quedan registrados en bitácora de auditoría;
+
+stop
+@enduml

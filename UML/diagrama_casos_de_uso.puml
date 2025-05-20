@@ -1,0 +1,48 @@
+@startuml
+left to right direction
+
+actor Gestor
+actor "Aprobador de Área" as AreaAprobador
+actor "Aprobador General" as GeneralAprobador
+actor Visualizador
+
+rectangle "Sistema O.C." {
+  Gestor -- (Login)
+  AreaAprobador -- (Login)
+  GeneralAprobador -- (Login)
+  Visualizador -- (Login)
+
+  (Registrar O.C.) as RegistrarOC
+  (Ver estado de mis O.C.) as EstadoOC
+  (Aprobar O.C. Área) as AprobarArea
+  (Rechazar O.C. Área) as RechazarArea
+  (Aprobar O.C. General) as AprobarGeneral
+  (Rechazar O.C. General) as RechazarGeneral
+  (Ver histórico de O.C.) as HistoricoOC
+  (Ver bitácora de auditoría) as Bitacora
+
+  Gestor -- RegistrarOC
+  Gestor -- EstadoOC
+  Gestor -- HistoricoOC
+
+  AreaAprobador -- AprobarArea
+  AreaAprobador -- RechazarArea
+  AreaAprobador -- HistoricoOC
+
+  GeneralAprobador -- AprobarGeneral
+  GeneralAprobador -- RechazarGeneral
+  GeneralAprobador -- HistoricoOC
+
+  Visualizador -- HistoricoOC
+
+  RegistrarOC --> (Notificar Aprobador de Área)
+  AprobarArea --> (Notificar Aprobador General)
+  AprobarArea --> (Notificar Gestor - Liberado)
+  RechazarArea --> (Notificar Gestor - Rechazo)
+  AprobarGeneral --> (Notificar Gestor - Finalizado)
+  RechazarGeneral --> (Notificar Gestor y Aprobador de Área - Rechazo)
+
+  HistoricoOC -- Bitacora
+}
+
+@enduml

@@ -1,0 +1,90 @@
+@startuml
+' Definición de clases principales
+class Usuario {
+  +id: int
+  +nombre: string
+  +apellido: string
+  +correo: string
+  +contrasena: string
+  +rol: Rol
+  +area: Area
+}
+
+enum Rol {
+  GESTOR
+  APROBADOR_AREA
+  APROBADOR_GENERAL
+  VISUALIZADOR
+}
+
+class Area {
+  +id: int
+  +nombre: string
+}
+
+class OrdenCompra {
+  +id: int
+  +fechaCreacion: datetime
+  +usuarioCreador: Usuario
+  +proveedor: string
+  +noFactura: string
+  +noOC: string
+  +area: Area
+  +estadoActual: EstadoOC
+  +historialEstados: List<EstadoOC>
+  +comentarios: List<Comentario>
+}
+
+class EstadoOC {
+  +id: int
+  +estado: EstadoEnum
+  +fecha: datetime
+  +usuario: Usuario
+  +comentario: string
+}
+
+enum EstadoEnum {
+  PENDIENTE
+  LIBERADO_POR_APROBADOR_AREA
+  RECHAZADO_POR_APROBADOR_AREA
+  FINALIZADO
+  RECHAZADO_POR_APROBADOR_GENERAL
+}
+
+class Comentario {
+  +id: int
+  +usuario: Usuario
+  +fecha: datetime
+  +texto: string
+  +etapa: EstadoEnum
+}
+
+class Notificacion {
+  +id: int
+  +destinatario: Usuario
+  +fecha: datetime
+  +mensaje: string
+  +ordenCompra: OrdenCompra
+}
+
+class Bitacora {
+  +id: int
+  +fecha: datetime
+  +usuario: Usuario
+  +accion: string
+  +detalle: string
+  +ordenCompra: OrdenCompra
+}
+
+' Relaciones
+Usuario "1" -- "*" OrdenCompra : crea >
+OrdenCompra "1" -- "*" EstadoOC : tiene >
+OrdenCompra "1" -- "*" Comentario : tiene >
+OrdenCompra "1" -- "*" Notificacion : genera >
+OrdenCompra "1" -- "*" Bitacora : registra >
+Usuario "1" -- "*" Notificacion : recibe >
+Usuario "1" -- "*" Bitacora : realiza >
+Usuario "1" -- "1" Area : pertenece >
+Area "1" -- "*" Usuario : agrupa >
+
+@enduml

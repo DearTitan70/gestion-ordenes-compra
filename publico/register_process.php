@@ -15,6 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // Validar correo único
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE correo = ? AND (username IS NULL OR username = '')");
+    $stmt->execute([$correo]);
+    if ($stmt->fetch()) {
+        header('Location: register.php?error=El correo ya está registrado');
+        exit;
+    }
+
     // Encriptar contraseña
     $hash = password_hash($contrasena, PASSWORD_DEFAULT);
 

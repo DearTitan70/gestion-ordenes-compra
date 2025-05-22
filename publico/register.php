@@ -2,7 +2,7 @@
 require_once '../config/db.php';
 
 // Obtener roles y áreas para los selects
-$roles = $pdo->query("SELECT id, nombre FROM roles")->fetchAll();
+$roles = $pdo->query("SELECT id, name FROM roles")->fetchAll();
 $areas = $pdo->query("SELECT id, nombre FROM area")->fetchAll();
 ?>
 <!DOCTYPE html>

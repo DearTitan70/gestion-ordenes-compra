@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
 
     // Buscar usuario por correo
-    $stmt = $pdo->prepare('SELECT u.id, u.nombre, u.apellido, u.password, r.nombre AS rol, a.nombre AS area
+    $stmt = $pdo->prepare('SELECT u.id, u.nombre, u.apellido, u.password, r.name AS rol, a.nombre AS area
                            FROM users u
                            JOIN roles r ON u.role_id = r.id
                            JOIN area a ON u.area_id = a.id

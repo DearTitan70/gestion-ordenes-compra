@@ -35,6 +35,7 @@ if (isset($_SESSION['usuario_id'])) {
     <div class="login-container">
         <img src="img/FDS_Logo.webp">
         <h2>Iniciar Sesión</h2>
+        <h3>Sistema de Gestion de O.C.</h3>
         <?php
         if (isset($_GET['error'])) {
             echo '<p style="color:red;">'.htmlspecialchars($_GET['error']).'</p>';

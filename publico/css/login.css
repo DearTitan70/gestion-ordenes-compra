@@ -1,41 +1,608 @@
+:root {
+    --color-background: #F9F3E5;
+    --color-text-dark: #000000;
+    --color-primary: #879683;
+    --color-secondary: #5A6B58;
+    --color-highlight: #C5D4C1;
+    --color-logout: #a0a0a0;
+    --color-logout-hover: #8a8a8a;
+    --shadow-soft: 0 8px 20px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.12);
+    --border-radius: 12px;
+    --transition-standard: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background: #f2f2f2;
-    font-family: Arial, sans-serif;
+    background: var(--color-background);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--color-text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
 }
+
 .login-container {
-    width: 350px;
-    margin: 80px auto;
-    padding: 30px 25px;
+    width: 100%;
+    max-width: 800px; /* Aumentado para acomodar tablas más grandes */
+    margin: 0 auto;
+    padding: 35px;
     background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-standard);
+    animation: fadeIn 0.8s ease-in-out;
+    overflow: hidden; /* Evita desbordamientos */
 }
+
+.login-container:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-5px);
+}
+
 .login-container h2 {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     text-align: center;
+    color: var(--color-secondary);
+    font-weight: 600;
+    font-size: 1.8rem;
+    position: relative;
+    padding-bottom: 12px;
 }
+
+.login-container h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--color-highlight);
+    border-radius: 3px;
+}
+
+.login-container h3 {
+    margin: 25px 0 15px;
+    color: var(--color-secondary);
+    font-weight: 500;
+}
+
 .login-container label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--color-secondary);
+    transition: var(--transition-standard);
 }
+
 .login-container input[type="email"],
-.login-container input[type="password"] {
+.login-container input[type="password"],
+.login-container input[type="text"], 
+.login-container textarea {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border: 2px solid var(--color-highlight);
+    border-radius: var(--border-radius);
+    background-color: rgba(197, 212, 193, 0.1);
+    font-size: 16px;
+    transition: var(--transition-standard);
 }
+
+.login-container input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(135, 150, 131, 0.2);
+    transform: translateY(-2px);
+}
+
 .login-container button {
     width: 100%;
-    padding: 10px;
-    background: #007bff;
+    padding: 14px;
+    background: var(--color-primary);
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--border-radius);
     font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
+    transition: var(--transition-standard);
+    position: relative;
+    overflow: hidden;
 }
+
 .login-container button:hover {
-    background: #0056b3;
+    background: var(--color-secondary);
+    transform: translateY(-2px);
+}
+
+.login-container button:active {
+    transform: translateY(1px);
+}
+
+.login-container button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%);
+    transform-origin: 50% 50%;
+}
+
+.login-container button:focus:not(:active)::after {
+    animation: ripple 1s ease-out;
+}
+
+.login-container p {
+    margin-top: 20px;
+    text-align: center;
+    color: var(--color-text-dark);
+}
+
+.login-container a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-standard);
+}
+
+.login-container a:hover {
+    color: var(--color-secondary);
+    text-decoration: underline;
+}
+
+/* Estilos para el Dashboard */
+.user-role {
+    text-align: center;
+    color: var(--color-primary);
+    font-size: 1.1rem;
+    margin-top: -10px;
+    margin-bottom: 25px;
+    font-weight: 500;
+}
+
+.dashboard-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 30px 0;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    background-color: #fff;
+    border: 2px solid var(--color-highlight);
+    border-radius: var(--border-radius);
+    color: var(--color-secondary);
+    text-decoration: none;
+    transition: var(--transition-standard);
+    box-shadow: var(--shadow-soft);
+}
+
+.menu-item:hover {
+    background-color: var(--color-highlight);
+    border-color: var(--color-primary);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    text-decoration: none;
+}
+
+.menu-icon {
+    font-size: 1.5rem;
+    margin-right: 15px;
+    min-width: 24px;
+    text-align: center;
+}
+
+.menu-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+.logout-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.logout-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--color-logout);
+    color: white !important;
+    border-radius: var(--border-radius);
+    text-decoration: none !important;
+    transition: var(--transition-standard);
+}
+
+.logout-button:hover {
+    background-color: var(--color-logout-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+    text-decoration: none !important;
+}
+
+/* Mensaje informativo */
+.info-message {
+    padding: 15px;
+    background-color: rgba(135, 150, 131, 0.1);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    color: var(--color-secondary);
+    font-weight: 500;
+}
+
+/* Estilos para contenedor de tabla responsiva */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-soft);
+}
+
+/* Estilos para tablas de datos */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.data-table thead {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.data-table th {
+    text-align: left;
+    padding: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--color-highlight);
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: rgba(197, 212, 193, 0.2);
+}
+
+.data-table tbody tr:hover {
+    background-color: rgba(197, 212, 193, 0.4);
+    transition: var(--transition-standard);
+}
+
+/* Botón de acción en tablas */
+.action-button {
+    display: inline-block;
+    padding: 8px 12px;
+    background-color: var(--color-primary);
+    color: white !important;
+    border-radius: var(--border-radius);
+    text-decoration: none !important;
+    font-size: 14px;
+    transition: var(--transition-standard);
+    text-align: center;
+    white-space: nowrap;
+}
+
+.action-button:hover {
+    background-color: var(--color-secondary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+    text-decoration: none !important;
+}
+
+/* Enlace de navegación */
+.navigation-link {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: var(--color-highlight);
+    color: var(--color-secondary) !important;
+    border-radius: var(--border-radius);
+    text-decoration: none !important;
+    font-weight: 500;
+    transition: var(--transition-standard);
+}
+
+.back-button:hover {
+    background-color: var(--color-primary);
+    color: white !important;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+    text-decoration: none !important;
+}
+
+/* Table Styles - Generales */
+.login-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+}
+
+.login-container table th {
+    background-color: var(--color-primary);
+    color: white;
+    text-align: left;
+    padding: 12px;
+    font-weight: 500;
+}
+
+.login-container table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--color-highlight);
+}
+
+.login-container table tr:last-child td {
+    border-bottom: none;
+}
+
+.login-container table tr:nth-child(even) {
+    background-color: rgba(197, 212, 193, 0.2);
+}
+
+.login-container table tr:hover {
+    background-color: rgba(197, 212, 193, 0.4);
+    transition: var(--transition-standard);
+}
+
+/* List Styles - ELIMINANDO VIÑETAS */
+.login-container ul {
+    list-style-type: none;
+    margin: 20px 0;
+}
+
+.login-container ul li {
+    margin-bottom: 15px;
+    /* Eliminado el padding-left y el posicionamiento relativo */
+}
+
+/* Eliminado el pseudo-elemento ::before que creaba las viñetas */
+.login-container ul li a {
+    display: block;
+    padding: 12px 20px;
+    background-color: var(--color-highlight);
+    color: var(--color-secondary);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition-standard);
+}
+
+.login-container ul li a:hover {
+    background-color: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-soft);
+    text-decoration: none;
+}
+
+/* Error and Success Messages */
+.login-container .error-message {
+    color: #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    border-left: 4px solid #e74c3c;
+    animation: shake 0.5s ease-in-out;
+}
+
+.login-container .success-message {
+    color: #27ae60;
+    background-color: rgba(39, 174, 96, 0.1);
+    padding: 10px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    border-left: 4px solid #27ae60;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Logout Link */
+.login-container a[href="logout.php"] {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 16px;
+    background-color: var(--color-logout);
+    color: white;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    transition: var(--transition-standard);
+}
+
+.login-container a[href="logout.php"]:hover {
+    background-color: var(--color-logout-hover);
+    text-decoration: none;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+    0%, 100% {transform: translateX(0);}
+    10%, 30%, 50%, 70%, 90% {transform: translateX(-5px);}
+    20%, 40%, 60%, 80% {transform: translateX(5px);}
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0);
+        opacity: 1;
+    }
+    20% {
+        transform: scale(25, 25);
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+        transform: scale(40, 40);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 25px 20px;
+        max-width: 95%;
+    }
+    
+    .login-container h2 {
+        font-size: 1.5rem;
+    }
+    
+    /* Mejora para tablas responsivas en móviles */
+    .data-table, 
+    .data-table thead, 
+    .data-table tbody, 
+    .data-table th, 
+    .data-table td, 
+    .data-table tr {
+        display: block;
+    }
+    
+    .data-table thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    
+    .data-table tr {
+        border: 1px solid var(--color-highlight);
+        margin-bottom: 15px;
+        border-radius: var(--border-radius);
+        overflow: hidden;
+    }
+    
+    .data-table td {
+        border: none;
+        border-bottom: 1px solid var(--color-highlight);
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+    
+    .data-table td:last-child {
+        border-bottom: none;
+    }
+    
+    .data-table td:before {
+        content: attr(data-label);
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        color: var(--color-secondary);
+    }
+    
+    .action-button {
+        display: block;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .menu-item {
+        padding: 12px 15px;
+    }
+    
+    .menu-icon {
+        font-size: 1.3rem;
+        margin-right: 10px;
+    }
+    
+    .menu-text {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .login-container {
+        padding: 20px 15px;
+    }
+    
+    .login-container h2 {
+        font-size: 1.3rem;
+    }
+    
+    .login-container input[type="email"],
+    .login-container input[type="password"],
+    .login-container input[type="text"],
+    .login-container button {
+        padding: 10px;
+        font-size: 14px;
+    }
+    
+    .data-table td {
+        padding-top: 40px; /* Más espacio para la etiqueta en móviles pequeños */
+        padding-left: 12px;
+        text-align: left;
+    }
+    
+    .data-table td:before {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        width: 100%;
+    }
+    
+    .menu-item {
+        padding: 10px 12px;
+    }
+    
+    .menu-icon {
+        font-size: 1.2rem;
+        margin-right: 8px;
+    }
+    
+    .menu-text {
+        font-size: 0.9rem;
+    }
 }

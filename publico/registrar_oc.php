@@ -1,5 +1,6 @@
 <?php
 session_start();
+header('Content-Type: text/html; charset=UTF-8');
 if (!isset($_SESSION['usuario_id']) || !in_array($_SESSION['rol'], ['GESTOR', 'APROBADOR_AREA', 'APROBADOR_GENERAL'])) {
     header('Location: index.php');
     exit;
@@ -32,6 +33,8 @@ if (isset($_GET['success'])) {
             <input type="text" id="no_factura" name="no_factura" required>
             <label for="no_oc">No. O.C.:</label>
             <input type="text" id="no_oc" name="no_oc" required>
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" rows="3" style="width:100%;"></textarea>
             <label>Fecha:</label>
             <input type="text" value="<?= date('Y-m-d H:i') ?>" disabled>
             <label>Usuario:</label>

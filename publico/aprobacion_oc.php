@@ -34,6 +34,7 @@ $ocs = $stmt->fetchAll();
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aprobación de O.C.</title>
     <link rel="stylesheet" href="css/login.css">
 </head>
@@ -41,32 +42,43 @@ $ocs = $stmt->fetchAll();
     <div class="login-container">
         <h2>Órdenes de Compra Pendientes de Aprobación</h2>
         <?php if (count($ocs) === 0): ?>
-            <p>No hay órdenes de compra pendientes.</p>
+            <p class="info-message">No hay órdenes de compra pendientes.</p>
         <?php else: ?>
-            <table border="1" cellpadding="6" style="width:100%;margin-bottom:15px;">
-                <tr>
-                    <th>No. O.C.</th>
-                    <th>Proveedor</th>
-                    <th>No. Factura</th>
-                    <th>Fecha</th>
-                    <th>Creador</th>
-                    <th>Acción</th>
-                </tr>
-                <?php foreach ($ocs as $oc): ?>
-                <tr>
-                    <td><?= htmlspecialchars($oc['no_oc']) ?></td>
-                    <td><?= htmlspecialchars($oc['proveedor']) ?></td>
-                    <td><?= htmlspecialchars($oc['no_factura']) ?></td>
-                    <td><?= htmlspecialchars($oc['fecha_creacion']) ?></td>
-                    <td><?= htmlspecialchars($oc['creador_nombre'] . ' ' . $oc['creador_apellido']) ?></td>
-                    <td>
-                        <a href="aprobar_oc_detalle.php?id=<?= $oc['id'] ?>">Ver / Aprobar / Rechazar</a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>No. O.C.</th>
+                            <th>Proveedor</th>
+                            <th>No. Factura</th>
+                            <th>Fecha</th>
+                            <th>Creador</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($ocs as $oc): ?>
+                        <tr>
+                            <td data-label="No. O.C."><?= htmlspecialchars($oc['no_oc']) ?></td>
+                            <td data-label="Proveedor"><?= htmlspecialchars($oc['proveedor']) ?></td>
+                            <td data-label="No. Factura"><?= htmlspecialchars($oc['no_factura']) ?></td>
+                            <td data-label="Fecha"><?= htmlspecialchars($oc['fecha_creacion']) ?></td>
+                            <td data-label="Creador"><?= htmlspecialchars($oc['creador_nombre'] . ' ' . $oc['creador_apellido']) ?></td>
+                            <td data-label="Acción">
+                                <a href="aprobar_oc_detalle.php?id=<?= $oc['id'] ?>" class="action-button">Ver / Aprobar / Rechazar</a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php endif; ?>
-        <p><a href="<?= $rol === 'APROBADOR_AREA' ? 'dashboard_aprobador_area.php' : 'dashboard_aprobador_general.php' ?>">Volver al dashboard</a></p>
+        <p class="navigation-link">
+            <a href="<?= $rol === 'APROBADOR_AREA' ? 'dashboard_aprobador_area.php' : 'dashboard_aprobador_general.php' ?>" class="back-button">
+                Volver al dashboard
+            </a>
+        </p>
     </div>
 </body>
 </html>
+

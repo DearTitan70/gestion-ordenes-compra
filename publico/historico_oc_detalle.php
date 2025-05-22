@@ -57,6 +57,7 @@ $comentarios = $stmt->fetchAll();
         <h2>Detalle de Orden de Compra</h2>
         <table border="1" cellpadding="6" style="width:100%;margin-bottom:15px;">
             <tr><th>No. O.C.</th><td><?= htmlspecialchars($oc['no_oc']) ?></td></tr>
+            <tr><th>Descripción</th><td><?= htmlspecialchars($oc['descripcion'] ?? 'Sin descripción') ?></td></tr>
             <tr><th>Proveedor</th><td><?= htmlspecialchars($oc['proveedor']) ?></td></tr>
             <tr><th>No. Factura</th><td><?= htmlspecialchars($oc['no_factura']) ?></td></tr>
             <tr><th>Área</th><td><?= htmlspecialchars($oc['area_nombre']) ?></td></tr>

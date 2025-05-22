@@ -1,0 +1,92 @@
+-- Tabla de áreas
+CREATE TABLE area (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL
+);
+
+-- Tabla de roles
+CREATE TABLE rol (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Tabla de usuarios
+CREATE TABLE usuario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    correo VARCHAR(150) NOT NULL UNIQUE,
+    contrasena VARCHAR(255) NOT NULL,
+    rol_id INT NOT NULL,
+    area_id INT NOT NULL,
+    FOREIGN KEY (rol_id) REFERENCES rol(id),
+    FOREIGN KEY (area_id) REFERENCES area(id)
+);
+
+-- Tabla de órdenes de compra
+CREATE TABLE orden_compra (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    usuario_creador_id INT NOT NULL,
+    proveedor VARCHAR(150) NOT NULL,
+    no_factura VARCHAR(100) NOT NULL,
+    no_oc VARCHAR(100) NOT NULL,
+    area_id INT NOT NULL,
+    estado_actual VARCHAR(50) NOT NULL,
+    FOREIGN KEY (usuario_creador_id) REFERENCES usuario(id),
+    FOREIGN KEY (area_id) REFERENCES area(id)
+);
+
+-- Tabla de estados de la O.C.
+CREATE TABLE estado_oc (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    orden_compra_id INT NOT NULL,
+    estado VARCHAR(50) NOT NULL,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    usuario_id INT NOT NULL,
+    comentario VARCHAR(500),
+    FOREIGN KEY (orden_compra_id) REFERENCES orden_compra(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
+
+-- Tabla de comentarios
+CREATE TABLE comentario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    orden_compra_id INT NOT NULL,
+    usuario_id INT NOT NULL,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    texto VARCHAR(500) NOT NULL,
+    etapa VARCHAR(50) NOT NULL,
+    FOREIGN KEY (orden_compra_id) REFERENCES orden_compra(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+);
+
+-- Tabla de notificaciones
+CREATE TABLE notificacion (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    destinatario_id INT NOT NULL,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    mensaje VARCHAR(500) NOT NULL,
+    orden_compra_id INT NOT NULL,
+    FOREIGN KEY (destinatario_id) REFERENCES usuario(id),
+    FOREIGN KEY (orden_compra_id) REFERENCES orden_compra(id)
+);
+
+-- Tabla de bitácora (auditoría)
+CREATE TABLE bitacora (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    usuario_id INT NOT NULL,
+    accion VARCHAR(100) NOT NULL,
+    detalle VARCHAR(500),
+    orden_compra_id INT,
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id),
+    FOREIGN KEY (orden_compra_id) REFERENCES orden_compra(id)
+);
+
+-- Insertar roles iniciales
+INSERT INTO rol (nombre) VALUES
+('GESTOR'),
+('APROBADOR_AREA'),
+('APROBADOR_GENERAL'),
+('VISUALIZADOR');

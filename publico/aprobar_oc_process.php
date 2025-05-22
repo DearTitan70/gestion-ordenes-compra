@@ -5,6 +5,7 @@ if (!isset($_SESSION['usuario_id']) || !in_array($_SESSION['rol'], ['APROBADOR_A
     exit;
 }
 require_once '../config/db.php';
+require_once '../src/funciones/mail.php';
 
 $usuario_id = $_SESSION['usuario_id'];
 $rol = $_SESSION['rol'];
@@ -111,19 +112,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($aprobador_general) {
                 $stmt = $pdo->prepare("INSERT INTO notificacion (destinatario_id, mensaje, orden_compra_id) VALUES (?, ?, ?)");
                 $stmt->execute([$aprobador_general['id'], $mensaje_aprobador_general, $oc_id]);
-                // mail($aprobador_general['correo'], "O.C. pendiente de liberación", $mensaje_aprobador_general);
+                enviarCorreo($aprobador_general['correo'], "O.C. pendiente de liberación", $mensaje_aprobador_general, $aprobador_general['nombre']);
             }
             if ($gestor) {
                 $stmt = $pdo->prepare("INSERT INTO notificacion (destinatario_id, mensaje, orden_compra_id) VALUES (?, ?, ?)");
                 $stmt->execute([$gestor['id'], $mensaje_gestor, $oc_id]);
-                // mail($gestor['correo'], "O.C. liberada", $mensaje_gestor);
+                enviarCorreo($gestor['correo'], "O.C. pendiente de liberación", $mensaje_gestor, $gestor['nombre']);
             }
         } else {
             // APROBADOR_GENERAL: Notificar solo al gestor
             if ($gestor) {
                 $stmt = $pdo->prepare("INSERT INTO notificacion (destinatario_id, mensaje, orden_compra_id) VALUES (?, ?, ?)");
                 $stmt->execute([$gestor['id'], $mensaje_gestor, $oc_id]);
-                // mail($gestor['correo'], "O.C. finalizada", $mensaje_gestor);
+                enviarCorreo($gestor['correo'], "O.C. pendiente de liberación", $mensaje_gestor, $gestor['nombre']);
+
             }
         }
     } else {
@@ -133,19 +135,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($gestor) {
                 $stmt = $pdo->prepare("INSERT INTO notificacion (destinatario_id, mensaje, orden_compra_id) VALUES (?, ?, ?)");
                 $stmt->execute([$gestor['id'], $mensaje_gestor, $oc_id]);
-                // mail($gestor['correo'], "O.C. rechazada", $mensaje_gestor);
+                enviarCorreo($gestor['correo'], "O.C. pendiente de liberación", $mensaje_gestor, $gestor['nombre']);
             }
         } else {
             // APROBADOR_GENERAL: Notificar a gestor y aprobador de área
             if ($gestor) {
                 $stmt = $pdo->prepare("INSERT INTO notificacion (destinatario_id, mensaje, orden_compra_id) VALUES (?, ?, ?)");
                 $stmt->execute([$gestor['id'], $mensaje_gestor, $oc_id]);
-                // mail($gestor['correo'], "O.C. rechazada", $mensaje_gestor);
+                enviarCorreo($gestor['correo'], "O.C. pendiente de liberación", $mensaje_gestor, $gestor['nombre']);
             }
             if ($aprobador_area) {
                 $stmt = $pdo->prepare("INSERT INTO notificacion (destinatario_id, mensaje, orden_compra_id) VALUES (?, ?, ?)");
                 $stmt->execute([$aprobador_area['id'], $mensaje_aprobador_area, $oc_id]);
-                // mail($aprobador_area['correo'], "O.C. rechazada", $mensaje_aprobador_area);
+                enviarCorreo($aprobador_area['correo'], "O.C. pendiente de liberación", $mensaje_aprobador_area, $aprobador_area['nombre']);
             }
         }
     }

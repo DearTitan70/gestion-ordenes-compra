@@ -5,6 +5,7 @@ if (!isset($_SESSION['usuario_id']) || !in_array($_SESSION['rol'], ['GESTOR', 'A
     exit;
 }
 require_once '../config/db.php';
+require_once '../src/utils/mail.php'; // Asegúrate de que la ruta sea correcta
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $proveedor = trim($_POST['proveedor'] ?? '');
@@ -41,20 +42,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_estado->execute([$oc_id, $usuario_id]);
 
         // Buscar el aprobador de área para notificar (primer usuario con rol APROBADOR_AREA y misma área)
-        $stmt_aprobador = $pdo->prepare("SELECT correo, nombre FROM usuario WHERE rol_id = (SELECT id FROM rol WHERE nombre = 'APROBADOR_AREA') AND area_id = ? LIMIT 1");
+        $stmt_aprobador = $pdo->prepare("SELECT id, correo, nombre FROM usuario WHERE rol_id = (SELECT id FROM rol WHERE nombre = 'APROBADOR_AREA') AND area_id = ? LIMIT 1");
         $stmt_aprobador->execute([$area_id]);
         $aprobador = $stmt_aprobador->fetch();
 
         if ($aprobador) {
-            // Preparar envío de correo (puedes configurar mail() o PHPMailer)
+            // Preparar envío de correo con PHPMailer
             $to = $aprobador['correo'];
             $subject = "Nueva Orden de Compra pendiente de aprobación";
             $message = "Hola " . $aprobador['nombre'] . ",\n\nTienes una nueva Orden de Compra pendiente de aprobación.\n\nNo. O.C.: $no_oc\nProveedor: $proveedor\n\nPor favor ingresa al sistema para revisarla.";
-            // mail($to, $subject, $message); // Descomenta y configura según tu servidor
+
+            // Enviar correo
+            enviarCorreo($to, $subject, $message, $aprobador['nombre']);
 
             // También puedes guardar la notificación en la tabla notificacion
-            $stmt_notif = $pdo->prepare("INSERT INTO notificacion (destinatario_id, mensaje, orden_compra_id) VALUES ((SELECT id FROM usuario WHERE correo = ?), ?, ?)");
-            $stmt_notif->execute([$to, $message, $oc_id]);
+            $stmt_notif = $pdo->prepare("INSERT INTO notificacion (destinatario_id, mensaje, orden_compra_id) VALUES (?, ?, ?)");
+            $stmt_notif->execute([$aprobador['id'], $message, $oc_id]);
         }
 
         header('Location: registrar_oc.php?success=1');

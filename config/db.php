@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
-$db   = 'services_gestion_oc';
-$user = 'services_gestion_oc';
-$pass = 'S1ST3NFDS-'; // Cambia esto por la contraseña real
+$db   = 'services_cargamasiva';
+$user = 'services_cargamasiva';
+$pass = 'S1ST3NFDS-'; 
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";

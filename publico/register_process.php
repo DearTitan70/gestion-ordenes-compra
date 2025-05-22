@@ -15,19 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Validar correo único
-    $stmt = $pdo->prepare("SELECT id FROM usuario WHERE correo = ?");
-    $stmt->execute([$correo]);
-    if ($stmt->fetch()) {
-        header('Location: register.php?error=El correo ya está registrado');
-        exit;
-    }
-
     // Encriptar contraseña
     $hash = password_hash($contrasena, PASSWORD_DEFAULT);
 
     // Insertar usuario
-    $stmt = $pdo->prepare("INSERT INTO usuario (nombre, apellido, correo, contrasena, rol_id, area_id) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $pdo->prepare("INSERT INTO users (nombre, apellido, correo, contrasena, rol_id, area_id) VALUES (?, ?, ?, ?, ?, ?)");
     try {
         $stmt->execute([$nombre, $apellido, $correo, $hash, $rol_id, $area_id]);
         header('Location: register.php?success=1');

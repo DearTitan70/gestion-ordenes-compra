@@ -4,18 +4,18 @@ require_once '../config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $correo = $_POST['correo'] ?? '';
-    $contrasena = $_POST['contrasena'] ?? '';
+    $password = $_POST['password'] ?? '';
 
     // Buscar usuario por correo
-    $stmt = $pdo->prepare('SELECT u.id, u.nombre, u.apellido, u.contrasena, r.nombre AS rol, a.nombre AS area
-                           FROM usuario u
-                           JOIN rol r ON u.rol_id = r.id
+    $stmt = $pdo->prepare('SELECT u.id, u.nombre, u.apellido, u.password, r.nombre AS rol, a.nombre AS area
+                           FROM users u
+                           JOIN roles r ON u.role_id = r.id
                            JOIN area a ON u.area_id = a.id
                            WHERE u.correo = ?');
     $stmt->execute([$correo]);
     $usuario = $stmt->fetch();
 
-    if ($usuario && password_verify($contrasena, $usuario['contrasena'])) {
+    if ($usuario && password_verify($password, $usuario['password'])) {
         // Login correcto
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['nombre'] = $usuario['nombre'];

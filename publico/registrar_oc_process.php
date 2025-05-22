@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $area_id = null;
 
     // Obtener el área del usuario
-    $stmt = $pdo->prepare("SELECT area_id, nombre FROM usuario WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT area_id, nombre FROM users WHERE id = ?");
     $stmt->execute([$usuario_id]);
     $row = $stmt->fetch();
     if ($row) {
@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_estado->execute([$oc_id, $usuario_id]);
 
         // Buscar el aprobador de área para notificar
-        $stmt_aprobador = $pdo->prepare("SELECT id, correo, nombre FROM usuario WHERE rol_id = (SELECT id FROM rol WHERE nombre = 'APROBADOR_AREA') AND area_id = ? LIMIT 1");
+        $stmt_aprobador = $pdo->prepare("SELECT id, correo, nombre FROM users WHERE role_id = (SELECT id FROM roles WHERE nombre = 'APROBADOR_AREA') AND area_id = ? LIMIT 1");
         $stmt_aprobador->execute([$area_id]);
         $aprobador = $stmt_aprobador->fetch();
 

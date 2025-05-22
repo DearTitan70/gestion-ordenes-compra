@@ -15,15 +15,15 @@ if ($rol === 'APROBADOR_AREA') {
     // Solo O.C. de su área y estado PENDIENTE
     $stmt = $pdo->prepare("SELECT oc.*, u.nombre AS creador_nombre, u.apellido AS creador_apellido
         FROM orden_compra oc
-        JOIN usuario u ON oc.usuario_creador_id = u.id
-        WHERE oc.area_id = (SELECT area_id FROM usuario WHERE id = ?) AND oc.estado_actual = 'PENDIENTE'
+        JOIN users u ON oc.usuario_creador_id = u.id
+        WHERE oc.area_id = (SELECT area_id FROM users WHERE id = ?) AND oc.estado_actual = 'PENDIENTE'
         ORDER BY oc.fecha_creacion DESC");
     $stmt->execute([$usuario_id]);
 } else {
     // APROBADOR_GENERAL: O.C. en estado LIBERADO POR APROBADOR DE AREA
     $stmt = $pdo->prepare("SELECT oc.*, u.nombre AS creador_nombre, u.apellido AS creador_apellido
         FROM orden_compra oc
-        JOIN usuario u ON oc.usuario_creador_id = u.id
+        JOIN users u ON oc.usuario_creador_id = u.id
         WHERE oc.estado_actual = 'LIBERADO POR APROBADOR DE AREA'
         ORDER BY oc.fecha_creacion DESC");
     $stmt->execute();

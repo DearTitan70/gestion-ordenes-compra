@@ -52,7 +52,7 @@ if ($f_no_factura !== '') {
 
 $sql = "SELECT oc.*, u.nombre AS creador_nombre, u.apellido AS creador_apellido, a.nombre AS area_nombre
     FROM orden_compra oc
-    JOIN usuario u ON oc.usuario_creador_id = u.id
+    JOIN users u ON oc.usuario_creador_id = u.id
     JOIN area a ON oc.area_id = a.id";
 if ($where) {
     $sql .= " WHERE " . implode(' AND ', $where);

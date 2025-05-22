@@ -17,7 +17,7 @@ if (!$oc_id) {
 // Traer info principal de la O.C.
 $stmt = $pdo->prepare("SELECT oc.*, u.nombre AS creador_nombre, u.apellido AS creador_apellido, a.nombre AS area_nombre
     FROM orden_compra oc
-    JOIN usuario u ON oc.usuario_creador_id = u.id
+    JOIN users u ON oc.usuario_creador_id = u.id
     JOIN area a ON oc.area_id = a.id
     WHERE oc.id = ?");
 $stmt->execute([$oc_id]);
@@ -30,7 +30,7 @@ if (!$oc) {
 // Traer historial de estados
 $stmt = $pdo->prepare("SELECT eo.*, u.nombre, u.apellido
     FROM estado_oc eo
-    JOIN usuario u ON eo.usuario_id = u.id
+    JOIN users u ON eo.usuario_id = u.id
     WHERE eo.orden_compra_id = ?
     ORDER BY eo.fecha ASC");
 $stmt->execute([$oc_id]);
@@ -39,7 +39,7 @@ $estados = $stmt->fetchAll();
 // Traer comentarios adicionales
 $stmt = $pdo->prepare("SELECT c.*, u.nombre, u.apellido
     FROM comentario c
-    JOIN usuario u ON c.usuario_id = u.id
+    JOIN users u ON c.usuario_id = u.id
     WHERE c.orden_compra_id = ?
     ORDER BY c.fecha ASC");
 $stmt->execute([$oc_id]);

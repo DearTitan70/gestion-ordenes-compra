@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         SELECT oc.*, a.nombre AS area_nombre, u.nombre AS usuario_creador_nombre, u.apellido AS usuario_creador_apellido
         FROM orden_compra oc
         JOIN area a ON oc.area_id = a.id
-        JOIN usuario u ON oc.usuario_creador_id = u.id
+        JOIN users u ON oc.usuario_creador_id = u.id
         WHERE oc.id = ?
     ");
     $stmt->execute([$oc_id]);
@@ -98,17 +98,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Notificaciones y correos
     // Obtener gestor (creador)
-    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM usuario u WHERE u.id = ?");
+    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM users u WHERE u.id = ?");
     $stmt->execute([$oc['usuario_creador_id']]);
     $gestor = $stmt->fetch();
 
     // Obtener aprobador de área
-    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM usuario u WHERE u.rol_id = (SELECT id FROM rol WHERE nombre = 'APROBADOR_AREA') AND u.area_id = ? LIMIT 1");
+    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM users u WHERE u.rol_id = (SELECT id FROM roles WHERE nombre = 'APROBADOR_AREA') AND u.area_id = ? LIMIT 1");
     $stmt->execute([$oc['area_id']]);
     $aprobador_area = $stmt->fetch();
 
     // Obtener aprobador general
-    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM usuario u WHERE u.rol_id = (SELECT id FROM rol WHERE nombre = 'APROBADOR_GENERAL') LIMIT 1");
+    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM users u WHERE u.rol_id = (SELECT id FROM roles WHERE nombre = 'APROBADOR_GENERAL') LIMIT 1");
     $stmt->execute();
     $aprobador_general = $stmt->fetch();
 

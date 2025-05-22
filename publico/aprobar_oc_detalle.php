@@ -12,7 +12,7 @@ $area = $_SESSION['area'];
 $area_id = null;
 
 // Obtener el id de área del usuario (para validación)
-$stmt_area = $pdo->prepare("SELECT area_id FROM usuario WHERE id = ?");
+$stmt_area = $pdo->prepare("SELECT area_id FROM users WHERE id = ?");
 $stmt_area->execute([$usuario_id]);
 $row_area = $stmt_area->fetch();
 if ($row_area) {
@@ -28,7 +28,7 @@ if (!$oc_id) {
 // Obtener datos de la O.C.
 $stmt = $pdo->prepare("SELECT oc.*, u.nombre AS creador_nombre, u.apellido AS creador_apellido, a.nombre AS area_nombre
     FROM orden_compra oc
-    JOIN usuario u ON oc.usuario_creador_id = u.id
+    JOIN users u ON oc.usuario_creador_id = u.id
     JOIN area a ON oc.area_id = a.id
     WHERE oc.id = ?");
 $stmt->execute([$oc_id]);

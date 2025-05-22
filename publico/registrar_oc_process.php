@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 header('Content-Type: text/html; charset=UTF-8');
@@ -7,6 +8,7 @@ if (!isset($_SESSION['usuario_id']) || !in_array($_SESSION['rol'], ['GESTOR', 'A
 }
 require_once '../config/db.php';
 require_once '../src/funciones/mail.php'; // Asegúrate de que la ruta sea correcta
+require_once '../src/funciones/generar_cuerpo_correo_oc.php'; // NUEVO: incluir generador de HTML
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $proveedor = trim($_POST['proveedor'] ?? '');
@@ -23,15 +25,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $area_id = null;
 
     // Obtener el área del usuario
-    $stmt = $pdo->prepare("SELECT area_id FROM usuario WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT area_id, nombre FROM usuario WHERE id = ?");
     $stmt->execute([$usuario_id]);
     $row = $stmt->fetch();
     if ($row) {
         $area_id = $row['area_id'];
+        $usuario_creador_nombre = $row['nombre'];
     } else {
         header('Location: registrar_oc.php?error=Error al obtener el área del usuario');
         exit;
     }
+
+    // Obtener el nombre del área
+    $stmt_area = $pdo->prepare("SELECT nombre FROM area WHERE id = ?");
+    $stmt_area->execute([$area_id]);
+    $row_area = $stmt_area->fetch();
+    $area_nombre = $row_area ? $row_area['nombre'] : '';
+
 
     // Insertar la orden de compra (ahora con descripción)
     $stmt = $pdo->prepare("INSERT INTO orden_compra (fecha_creacion, usuario_creador_id, proveedor, no_factura, no_oc, descripcion, area_id, estado_actual) VALUES (NOW(), ?, ?, ?, ?, ?, ?, 'PENDIENTE')");
@@ -49,24 +59,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $aprobador = $stmt_aprobador->fetch();
 
         if ($aprobador) {
-            // Preparar envío de correo con PHPMailer
-            $to = $aprobador['correo'];
-            $subject = "Nueva Orden de Compra pendiente de aprobación";
-            $message = "Hola " . $aprobador['nombre'] . ",\n\nTienes una nueva Orden de Compra pendiente de aprobación.\n\nNo. O.C.: $no_oc\nProveedor: $proveedor";
-            
-            // Agregar descripción al correo si existe
+            // Preparar datos para el correo HTML
+            $oc = [
+                'id' => $oc_id,
+                'fecha' => date('Y-m-d'),
+                'proveedor' => $proveedor,
+                'no_factura' => $no_factura,
+                'no_oc' => $no_oc,
+                'descripcion' => $descripcion,
+                'area_nombre' => $area_nombre, // <-- Aquí ya llega el nombre
+                'usuario_creador_nombre' => $usuario_creador_nombre,
+            ];
+            $estado = 'PENDIENTE';
+            $mensaje = "Tienes una nueva Orden de Compra pendiente de aprobación.";
+            $comentario = '';
+            $nombre_destinatario = $aprobador['nombre'];
+            $rol_destinatario = 'Aprobador de Área';
+
+            // Generar cuerpo HTML
+            $cuerpo_html = generarCuerpoCorreoOC($oc, $estado, $mensaje, $comentario, $nombre_destinatario, $rol_destinatario);
+
+            // Enviar correo HTML
+            enviarCorreo($aprobador['correo'], "Nueva Orden de Compra pendiente de aprobación", $cuerpo_html, $aprobador['nombre'], true);
+
+            // También guardar la notificación en la tabla notificacion (puede ser texto plano)
+            $mensaje_notif = "Tienes una nueva Orden de Compra pendiente de aprobación. No. O.C.: $no_oc, Proveedor: $proveedor";
             if (!empty($descripcion)) {
-                $message .= "\nDescripción: $descripcion";
+                $mensaje_notif .= ", Descripción: $descripcion";
             }
-            
-            $message .= "\n\nPor favor ingresa al sistema para revisarla.";
-
-            // Enviar correo
-            enviarCorreo($to, $subject, $message, $aprobador['nombre']);
-
-            // También guardar la notificación en la tabla notificacion
             $stmt_notif = $pdo->prepare("INSERT INTO notificacion (destinatario_id, mensaje, orden_compra_id) VALUES (?, ?, ?)");
-            $stmt_notif->execute([$aprobador['id'], $message, $oc_id]);
+            $stmt_notif->execute([$aprobador['id'], $mensaje_notif, $oc_id]);
         }
 
         header('Location: registrar_oc.php?success=1');

@@ -18,6 +18,8 @@ $f_area = isset($_GET['area_id']) ? $_GET['area_id'] : '';
 $f_estado = isset($_GET['estado_actual']) ? $_GET['estado_actual'] : '';
 $f_fecha_ini = isset($_GET['fecha_ini']) ? $_GET['fecha_ini'] : '';
 $f_fecha_fin = isset($_GET['fecha_fin']) ? $_GET['fecha_fin'] : '';
+$f_no_oc = isset($_GET['no_oc']) ? trim($_GET['no_oc']) : '';
+$f_no_factura = isset($_GET['no_factura']) ? trim($_GET['no_factura']) : '';
 
 // Construir consulta dinámica
 $where = [];
@@ -38,6 +40,14 @@ if ($f_fecha_ini !== '') {
 if ($f_fecha_fin !== '') {
     $where[] = 'oc.fecha_creacion <= ?';
     $params[] = $f_fecha_fin . ' 23:59:59';
+}
+if ($f_no_oc !== '') {
+    $where[] = 'oc.no_oc LIKE ?';
+    $params[] = '%' . $f_no_oc . '%';
+}
+if ($f_no_factura !== '') {
+    $where[] = 'oc.no_factura LIKE ?';
+    $params[] = '%' . $f_no_factura . '%';
 }
 
 $sql = "SELECT oc.*, u.nombre AS creador_nombre, u.apellido AS creador_apellido, a.nombre AS area_nombre
@@ -102,6 +112,17 @@ $ocs = $stmt->fetchAll();
                     <div class="filter-group">
                         <label for="fecha_fin">Fecha fin:</label>
                         <input type="date" id="fecha_fin" name="fecha_fin" class="date-input" value="<?= htmlspecialchars($f_fecha_fin) ?>">
+                    </div>
+                </div>
+                
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="no_oc">No. O.C.:</label>
+                        <input type="text" id="no_oc" name="no_oc" class="text-input" value="<?= htmlspecialchars($f_no_oc) ?>">
+                    </div>
+                    <div class="filter-group">
+                        <label for="no_factura">No. Factura:</label>
+                        <input type="text" id="no_factura" name="no_factura" class="text-input" value="<?= htmlspecialchars($f_no_factura) ?>">
                     </div>
                 </div>
                 

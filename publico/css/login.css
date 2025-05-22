@@ -93,7 +93,8 @@ img {
 
 .login-container input[type="email"],
 .login-container input[type="password"],
-.login-container input[type="text"] {
+.login-container input[type="text"],
+.login-container textarea {
     width: 100%;
     padding: 12px 15px;
     margin-bottom: 20px;
@@ -739,6 +740,7 @@ img {
     .login-container input[type="email"],
     .login-container input[type="password"],
     .login-container input[type="text"],
+    .login-container textarea
     .login-container button,
     .date-input,
     .filter-select {

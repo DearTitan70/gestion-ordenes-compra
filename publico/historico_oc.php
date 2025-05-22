@@ -57,72 +57,102 @@ $ocs = $stmt->fetchAll();
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Histórico de Órdenes de Compra</title>
     <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
     <div class="login-container">
         <h2>Histórico de Órdenes de Compra</h2>
-        <form method="get" style="margin-bottom:20px;">
-            <label>Área:
-                <select name="area_id">
-                    <option value="">Todas</option>
-                    <?php foreach ($areas as $area): ?>
-                        <option value="<?= $area['id'] ?>" <?= $f_area == $area['id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($area['nombre']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-            <label>Estado:
-                <select name="estado_actual">
-                    <option value="">Todos</option>
-                    <?php foreach ($estados as $estado): ?>
-                        <option value="<?= htmlspecialchars($estado['estado_actual']) ?>" <?= $f_estado == $estado['estado_actual'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($estado['estado_actual']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </label>
-            <label>Fecha inicio:
-                <input type="date" name="fecha_ini" value="<?= htmlspecialchars($f_fecha_ini) ?>">
-            </label>
-            <label>Fecha fin:
-                <input type="date" name="fecha_fin" value="<?= htmlspecialchars($f_fecha_fin) ?>">
-            </label>
-            <button type="submit">Filtrar</button>
-            <a href="historico_oc.php" style="margin-left:10px;">Limpiar</a>
-        </form>
+        
+        <div class="filter-container">
+            <form method="get" class="filter-form">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="area_id">Área:</label>
+                        <select id="area_id" name="area_id" class="filter-select">
+                            <option value="">Todas</option>
+                            <?php foreach ($areas as $area): ?>
+                                <option value="<?= $area['id'] ?>" <?= $f_area == $area['id'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($area['nombre']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="estado_actual">Estado:</label>
+                        <select id="estado_actual" name="estado_actual" class="filter-select">
+                            <option value="">Todos</option>
+                            <?php foreach ($estados as $estado): ?>
+                                <option value="<?= htmlspecialchars($estado['estado_actual']) ?>" <?= $f_estado == $estado['estado_actual'] ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($estado['estado_actual']) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label for="fecha_ini">Fecha inicio:</label>
+                        <input type="date" id="fecha_ini" name="fecha_ini" class="date-input" value="<?= htmlspecialchars($f_fecha_ini) ?>">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="fecha_fin">Fecha fin:</label>
+                        <input type="date" id="fecha_fin" name="fecha_fin" class="date-input" value="<?= htmlspecialchars($f_fecha_fin) ?>">
+                    </div>
+                </div>
+                
+                <div class="filter-actions">
+                    <button type="submit" class="filter-button">
+                        <span class="button-icon">🔍</span> Filtrar
+                    </button>
+                    <a href="historico_oc.php" class="clear-button">
+                        <span class="button-icon">↺</span> Limpiar
+                    </a>
+                </div>
+            </form>
+        </div>
+        
         <?php if (count($ocs) === 0): ?>
-            <p>No hay órdenes de compra registradas.</p>
+            <p class="info-message">No hay órdenes de compra registradas.</p>
         <?php else: ?>
-            <table border="1" cellpadding="6" style="width:100%;margin-bottom:15px;">
-                <tr>
-                    <th>No. O.C.</th>
-                    <th>Proveedor</th>
-                    <th>No. Factura</th>
-                    <th>Área</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                    <th>Creador</th>
-                    <th>Acción</th>
-                </tr>
-                <?php foreach ($ocs as $oc): ?>
-                <tr>
-                    <td><?= htmlspecialchars($oc['no_oc']) ?></td>
-                    <td><?= htmlspecialchars($oc['proveedor']) ?></td>
-                    <td><?= htmlspecialchars($oc['no_factura']) ?></td>
-                    <td><?= htmlspecialchars($oc['area_nombre']) ?></td>
-                    <td><?= htmlspecialchars($oc['estado_actual']) ?></td>
-                    <td><?= htmlspecialchars($oc['fecha_creacion']) ?></td>
-                    <td><?= htmlspecialchars($oc['creador_nombre'] . ' ' . $oc['creador_apellido']) ?></td>
-                    <td>
-                        <a href="historico_oc_detalle.php?id=<?= $oc['id'] ?>">Ver detalle</a>
-                    </td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>No. O.C.</th>
+                            <th>Proveedor</th>
+                            <th>No. Factura</th>
+                            <th>Área</th>
+                            <th>Estado</th>
+                            <th>Fecha</th>
+                            <th>Creador</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($ocs as $oc): ?>
+                        <tr>
+                            <td data-label="No. O.C."><?= htmlspecialchars($oc['no_oc']) ?></td>
+                            <td data-label="Proveedor"><?= htmlspecialchars($oc['proveedor']) ?></td>
+                            <td data-label="No. Factura"><?= htmlspecialchars($oc['no_factura']) ?></td>
+                            <td data-label="Área"><?= htmlspecialchars($oc['area_nombre']) ?></td>
+                            <td data-label="Estado"><?= htmlspecialchars($oc['estado_actual']) ?></td>
+                            <td data-label="Fecha"><?= htmlspecialchars($oc['fecha_creacion']) ?></td>
+                            <td data-label="Creador"><?= htmlspecialchars($oc['creador_nombre'] . ' ' . $oc['creador_apellido']) ?></td>
+                            <td data-label="Acción">
+                                <a href="historico_oc_detalle.php?id=<?= $oc['id'] ?>" class="action-button">Ver detalle</a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php endif; ?>
+        
         <?php
         // Enlace dinámico al dashboard según rol
         $dashboard = '';
@@ -143,7 +173,9 @@ $ocs = $stmt->fetchAll();
                 $dashboard = 'index.php';
         }
         ?>
-        <p><a href="<?= $dashboard ?>">Volver al dashboard</a></p>
+        <p class="navigation-link">
+            <a href="<?= $dashboard ?>" class="back-button">Volver al dashboard</a>
+        </p>
     </div>
 </body>
 </html>

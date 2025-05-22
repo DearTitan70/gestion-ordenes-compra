@@ -68,6 +68,7 @@ if (isset($_GET['error'])) {
         <?= $mensaje ?>
         <table border="1" cellpadding="6" style="width:100%;margin-bottom:15px;">
             <tr><th>No. O.C.</th><td><?= htmlspecialchars($oc['no_oc']) ?></td></tr>
+            <tr><th>Descripción</th><td><?= htmlspecialchars($oc['descripcion']) ?></td></tr>
             <tr><th>Proveedor</th><td><?= htmlspecialchars($oc['proveedor']) ?></td></tr>
             <tr><th>No. Factura</th><td><?= htmlspecialchars($oc['no_factura']) ?></td></tr>
             <tr><th>Fecha</th><td><?= htmlspecialchars($oc['fecha_creacion']) ?></td></tr>

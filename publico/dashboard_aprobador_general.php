@@ -4,7 +4,6 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'APROBADOR_GENERAL')
     header('Location: index.php');
     exit;
 }
-mysqli_set_charset($con, "utf8mb4");
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -16,6 +15,7 @@ mysqli_set_charset($con, "utf8mb4");
 </head>
 <body>
     <div class="login-container">
+        <img src="img/FDS_Logo.webp">
         <h2>Bienvenido, <?= htmlspecialchars($_SESSION['nombre']) ?></h2>
         <p class="user-role">Aprobador General</p>
         

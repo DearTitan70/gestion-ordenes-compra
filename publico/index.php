@@ -33,6 +33,7 @@ if (isset($_SESSION['usuario_id'])) {
 </head>
 <body>
     <div class="login-container">
+        <img src="img/FDS_Logo.webp">
         <h2>Iniciar Sesión</h2>
         <?php
         if (isset($_GET['error'])) {

@@ -40,7 +40,23 @@ if (isset($_GET['success'])) {
             <input type="text" value="<?= htmlspecialchars($_SESSION['area']) ?>" disabled>
             <button type="submit">Registrar</button>
         </form>
-        <p style="margin-top:15px;"><a href="<?= $_SESSION['rol'] === 'GESTOR' ? 'dashboard_gestor.php' : 'dashboard_aprobador_area.php' ?>">Volver al dashboard</a></p>
+        <?php
+        $dashboard = '';
+        switch ($_SESSION['rol']) {
+            case 'GESTOR':
+                $dashboard = 'dashboard_gestor.php';
+                break;
+            case 'APROBADOR_AREA':
+                $dashboard = 'dashboard_aprobador_area.php';
+                break;
+            case 'APROBADOR_GENERAL':
+                $dashboard = 'dashboard_aprobador_general.php';
+                break;
+            default:
+                $dashboard = 'index.php';
+        }
+        ?>
+        <p style="margin-top:15px;"><a href="<?= $dashboard ?>">Volver al dashboard</a></p>
     </div>
 </body>
 </html>

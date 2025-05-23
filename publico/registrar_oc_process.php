@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_estado->execute([$oc_id, $usuario_id]);
 
         // Buscar el aprobador de área para notificar
-        $stmt_aprobador = $pdo->prepare("SELECT id, correo, nombre FROM users WHERE role_id = (SELECT id FROM roles WHERE nombre = 'APROBADOR_AREA') AND area_id = ? LIMIT 1");
+        $stmt_aprobador = $pdo->prepare("SELECT id, correo, nombre FROM users WHERE role_id_oc = (SELECT id FROM roles WHERE name = 'APROBADOR_AREA') AND area_id = ? LIMIT 1");
         $stmt_aprobador->execute([$area_id]);
         $aprobador = $stmt_aprobador->fetch();
 
@@ -94,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: registrar_oc.php?success=1');
         exit;
     } catch (Exception $e) {
-        header('Location: registrar_oc.php?error=Error al registrar la Orden de Compra');
+        die("Error al registrar O.C.: " . $e->getMessage());
         exit;
     }
 } else {

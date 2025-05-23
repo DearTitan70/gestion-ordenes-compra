@@ -30,17 +30,17 @@ $areas = $pdo->query("SELECT id, nombre FROM area")->fetchAll();
             <input type="text" id="apellido" name="apellido" required>
             <label for="correo">Correo electrónico:</label>
             <input type="email" id="correo" name="correo" required>
-            <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" name="contrasena" required>
-            <label for="rol">Rol:</label>
-            <select id="rol" name="rol_id" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+            <label for="role_id_oc">Rol:</label>
+            <select id="role_id_oc" name="role_id_oc" required>
                 <option value="">Seleccione un rol</option>
                 <?php foreach ($roles as $rol): ?>
-                    <option value="<?= $rol['id'] ?>"><?= htmlspecialchars($rol['nombre']) ?></option>
+                    <option value="<?= $rol['id'] ?>"><?= htmlspecialchars($rol['name']) ?></option>
                 <?php endforeach; ?>
             </select>
-            <label for="area">Área:</label>
-            <select id="area" name="area_id" required>
+            <label for="area_id">Área:</label>
+            <select id="area_id" name="area_id" required>
                 <option value="">Seleccione un área</option>
                 <?php foreach ($areas as $area): ?>
                     <option value="<?= $area['id'] ?>"><?= htmlspecialchars($area['nombre']) ?></option>

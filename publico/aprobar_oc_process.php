@@ -103,12 +103,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $gestor = $stmt->fetch();
 
     // Obtener aprobador de área
-    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM users u WHERE u.rol_id = (SELECT id FROM roles WHERE nombre = 'APROBADOR_AREA') AND u.area_id = ? LIMIT 1");
+    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM users u WHERE u.role_id_oc = (SELECT id FROM roles WHERE name = 'APROBADOR_AREA') AND u.area_id = ? LIMIT 1");
     $stmt->execute([$oc['area_id']]);
     $aprobador_area = $stmt->fetch();
 
     // Obtener aprobador general
-    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM users u WHERE u.rol_id = (SELECT id FROM roles WHERE nombre = 'APROBADOR_GENERAL') LIMIT 1");
+    $stmt = $pdo->prepare("SELECT u.id, u.correo, u.nombre FROM users u WHERE u.role_id_oc = (SELECT id FROM roles WHERE name = 'APROBADOR_GENERAL') LIMIT 1");
     $stmt->execute();
     $aprobador_general = $stmt->fetch();
 

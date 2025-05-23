@@ -1,3 +1,4 @@
+
 <?php
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -14,7 +15,10 @@ function enviarCorreo($to, $subject, $body, $toName = '') {
         $mail->Password = 'S1ST3NFDS-';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port = 465;
+
+        // UTF-8 settings
         $mail->CharSet = 'UTF-8';
+        $mail->Encoding = 'base64'; // Recommended for UTF-8 with PHPMailer
 
         $mail->setFrom('notificaciones@fds.com.co', 'Sistema de Cargas');
         $mail->addAddress($to, $toName);

@@ -20,7 +20,7 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'GESTOR') {
             <li><a href="registrar_oc.php">Registrar Orden de Compra</a></li>
             <li><a href="estado_oc.php">Estado de mis O.C.</a></li>
         </ul>
-        <p><a href="logout.php">Cerrar sesión</a></p>
+        <p><a href="logout.php">Cerrar sesion</a></p>
     </div>
 </body>
 </html>

@@ -47,8 +47,8 @@ if (isset($_SESSION['usuario_id'])) {
         <form action="login_process.php" method="post">
             <label for="correo">Correo electrónico:</label>
             <input type="email" id="correo" name="correo" required>
-            <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" name="contrasena" required>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
             <button type="submit">Ingresar</button>
         </form>
         <p style="margin-top:15px;">

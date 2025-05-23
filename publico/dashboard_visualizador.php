@@ -4,7 +4,6 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['rol'] !== 'VISUALIZADOR') {
     header('Location: index.php');
     exit;
 }
-mysqli_set_charset($con, "utf8mb4");
 ?>
 <!DOCTYPE html>
 <html lang="es">

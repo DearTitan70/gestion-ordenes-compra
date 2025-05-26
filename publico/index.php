@@ -50,6 +50,9 @@ if (isset($_SESSION['usuario_id'])) {
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password" required>
             <button type="submit">Ingresar</button>
+            <div style="margin-top:10px;">
+                <a href="forgot_password.php">¿Olvidaste tu contraseña?</a>
+            </div>
         </form>
         <p style="margin-top:15px;">
             ¿No tienes cuenta? <a href="register.php">Regístrate aquí</a>

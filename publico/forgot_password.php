@@ -92,6 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="login-container">
         <img src="img/FDS_Logo.webp">
         <h2>¿Olvidaste tu contraseña?</h2>
+        <h3>En caso de que tambien tengas acceso a la plataforma de creacion de SKU's, recuerda que tu contraseña es la misma, si no la recuerdas continua con el proceso de recuperacion. En caso de que no tengas acceso a esta plataforma, ignora este mensaje</h3> 
         <p>Ingresa tu correo electrónico y te enviaremos instrucciones para restablecer tu contraseña.</p>
         <?php if ($mensaje): ?>
             <p style="color:green;"><?php echo htmlspecialchars($mensaje); ?></p>

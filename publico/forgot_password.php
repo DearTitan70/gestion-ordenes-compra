@@ -48,6 +48,8 @@ function enviarCorreoRecuperacion($correo, $token) {
         $mail->setFrom('notificaciones@fds.com.co', 'Gestión O.C.');
         $mail->addAddress($correo);
 
+        $mail->CharSet = 'UTF-8';
+
         $mail->isHTML(true);
         $mail->Subject = $asunto;
         $mail->Body    = $mensaje;
